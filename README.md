@@ -2,7 +2,7 @@
 	<img src="https://pterodactyl.io/logos/banner_logo.png" width="200" style="margin-left: auto;margin-right: auto;display: block;">
 </p>
 <h1 align="center">Whatsapp Pterodactyl Bot</h1>
-<h1 align="center">A Whatsapp Bot can control Pterodactyl Panel</h1>
+<h align="center">A Whatsapp Bot can control Pterodactyl Panel</h>
 
 ## REQUIREMENT
 * NodeJS 17 Or Higher
