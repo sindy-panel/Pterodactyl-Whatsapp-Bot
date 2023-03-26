@@ -17,8 +17,8 @@
 
 ## UNTUK USER WINDOWS
 
-* Instal Git [`Klik Disini`](https://git-scm.com/downloads)
-* Instal NodeJS [`Klik Disini`](https://nodejs.org/en/download)
+* Install Git [`Klik Disini`](https://git-scm.com/downloads)
+* Install NodeJS [`Klik Disini`](https://nodejs.org/en/download)
 
 ```bash
 git clone https://github.com/Pann09/Pterodactyl-Whatsapp-Bot
@@ -55,7 +55,7 @@ node .
 ```
 ---------
 ## Edit file
-- Edit Nomor Owner dan Pterodactyl Api [disini](https://github.com/Pann09/Pterodactyl-Whatsapp-Bot/cpsetting/cpsetting.js)
+- Edit Nomor Owner dan Pterodactyl Api [disini](https://github.com/Pann09/Pterodactyl-Whatsapp-Bot/blob/main/cpsetting/cpsettings.js)
 
 ---------
 
