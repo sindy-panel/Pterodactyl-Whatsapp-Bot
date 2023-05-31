@@ -128,7 +128,7 @@ fs.writeFileSync('./js/database/user.json', JSON.stringify(_db, null, 3))
 }
 
 switch (command) {
-
+// Pterodactyl Menu
 case "listusr": {
 if (!isCreator) return m.reply(`Owner Only Broo..`)
 let page = args[0] ? args[0] : '1'
@@ -180,15 +180,16 @@ let t = text.split(',');
 if (t.length < 3) return m.reply(`*Format salah!*
 
 Penggunaan:
-${prefix + command} email,username,name,number/tag`);
+${prefix + command} email ,username ,name ,lastname ,number/tag`);
 let email = t[0];
 let username = t[1];
 let name = t[2];
-let u = m.quoted ? m.quoted.sender : t[3] ? t[3].replace(/[^0-9]/g, '') + '@s.whatsapp.net' : m.mentionedJid[0];
+let lastname = t[3];
+let u = m.quoted ? m.quoted.sender : t[4] ? t[4].replace(/[^0-9]/g, '') + '@s.whatsapp.net' : m.mentionedJid[0];
 if (!u) return m.reply(`*Format salah!*
 
 Penggunaan:
-${prefix + command} email,username,name,number/tag`);
+${prefix + command} email ,username ,name ,lastname ,number/tag`);
 let d = (await zassxd.onWhatsApp(u.split`@`[0]))[0] || {}
 let password = d.exists ? crypto.randomBytes(5).toString('hex') : t[3]
 let f = await fetch(domain + "/api/application/users", {
@@ -202,7 +203,7 @@ let f = await fetch(domain + "/api/application/users", {
 "email": email,
 "username": username,
 "first_name": name,
-"last_name": "Memb",
+"last_name": lastname,
 "language": "en",
 "password": password.toString()
 })
@@ -215,33 +216,37 @@ let p = await zassxd.sendMessage(m.chat, { text: `
 
 TYPE: user
 
-📡ID: ${user.id}
-🌷UUID: ${user.uuid}
-👤USERNAME: ${user.username}
-📬EMAIL: ${user.email}
-🦖NAME: ${user.first_name} ${user.last_name}
-🔥LANGUAGE: ${user.language}
-📊ADMIN: ${user.root_admin}
-☢️CREATED AT: ${user.created_at}
+ID: ${user.id}
+UUID: ${user.uuid}
+USERNAME: ${user.username}
+EMAIL: ${user.email}
+NAME: ${user.first_name} ${user.last_name}
+LANGUAGE: ${user.language}
+ADMIN: ${user.root_admin}
+CREATED AT: ${user.created_at}
 
 🖥️LOGIN: ${domain}
 
 *Password telah dikirim di private chat @${u.split`@`[0]}*`, mentions:[u],
 })
 zassxd.sendMessage(u, { text: `*===[ Akun Pterodactyl Anda ]===*\n
-📡ID: ${user.id}
-📬EMAIL: ${user.uuid}
-👤USERNAME: ${user.username}
-🔐PASSWORD: ${password.toString()}
-🖥️Panel Ptero: ${domain}
-website:
+LEVEL: user/member
+ID: ${user.id}
+EMAIL: ${user.email}
+USERNAME: ${user.username}
+PASSWORD: ${password.toString()}
+Panel Ptero: ${domain}
+==================================
+		Social
+
+➤ Website:
 www.cpancloud.com
-github:
+➤ Github:
 https://github.com/Pann09
-=====================================
-        *☢️WARNING☢️*
+==================================
+        *☢️Announcement☢️*
 Reff Only Down
-=====================================`,
+==================================`,
 })
 }
 break
@@ -292,7 +297,6 @@ CREATED AT: ${u.created_at}\`\`\``)
 }
 break
 case "listsrv": {
-if (!isCreator) return m.reply(`Owner Only Broo..`)
 let page = args[0] ? args[0] : '1'
 let f = await fetch(domain + "/api/application/servers?page=" + page, {
 "method": "GET",
@@ -344,14 +348,18 @@ sections
 }, { quoted: m })
 }
 break
-case "addsrv": {
+case "addsrvpmmp": {
 
 if (!isCreator) return m.reply(`Owner Only Broo..`)
 let s = text.split(',');
-if (s.length < 7) return m.reply(`*Format salah!*
+if (s.length < 7) return m.reply(`*Format Yang Benar*
 
+PocketMine Only, Info: {
+Location: 5
+EggID: 21
+}
 Penggunaan:
-${prefix + command} name,tanggal,userId,eggId,locationId,memory/disk,cpu`)
+${prefix + command} name ,desc ,userId ,21 ,5 ,memory/disk ,cpu`)
 let name = s[0];
 let desc = s[1] || ''
 let usr_id = s[2];
@@ -369,7 +377,7 @@ let f1 = await fetch(domain + "/api/application/nests/5/eggs/" + egg, {
 }
 })
 let data = await f1.json();
-let startup_cmd = data.attributes.startup
+let startup_cmd = "./bin/php7/bin/php ./PocketMine-MP.phar --no-wizard --disable-ansi"
 
 let f = await fetch(domain + "/api/application/servers", {
 "method": "POST",
@@ -386,10 +394,8 @@ let f = await fetch(domain + "/api/application/servers", {
 "docker_image": "ghcr.io/parkervcp/yolks:nodejs_18",
 "startup": startup_cmd,
 "environment": {
-"INST": "npm",
-"USER_UPLOAD": "0",
-"AUTO_UPDATE": "0",
-"CMD_RUN": "npm start"
+
+"VERSION": "PM4"
 },
 "limits": {
 "memory": memo_disk[0],
@@ -399,14 +405,14 @@ let f = await fetch(domain + "/api/application/servers", {
 "cpu": cpu
 },
 "feature_limits": {
-"databases": 5,
+"databases": 0,
 "backups": 5,
-"allocations": 5
+"allocations": 0
 },
 deploy: {
 locations: [parseInt(loc)],
 dedicated_ip: false,
-port_range: [],
+port_range: ["19100-19200"],
 },
 })
 })
@@ -415,6 +421,95 @@ if (res.errors) return m.reply(JSON.stringify(res.errors[0], null, 2))
 let server = res.attributes
 m.reply(`*Berhasil Menambahkan Server*
 
+SOFTWARE: PHP-PocketMine
+TYPE: ${res.object}
+
+ID: ${server.id}
+UUID: ${server.uuid}
+NAME: ${server.name}
+DESCRIPTION: ${server.description}
+MEMORY: ${server.limits.memory === 0 ? 'Unlimited' : server.limits.memory} MB
+DISK: ${server.limits.disk === 0 ? 'Unlimited' : server.limits.disk} MB
+CPU: ${server.limits.cpu}%
+CREATED AT: ${server.created_at}`)
+}
+break
+case "addsrvpaper": {
+
+if (!isCreator) return m.reply(`Owner Only Broo..`)
+let s = text.split(',');
+if (s.length < 7) return m.reply(`*Format Yang Benar*
+
+Paper Only, Info: {
+Location: 5
+EggID: 5
+}
+Penggunaan:
+${prefix + command} name ,desc ,userId ,5 ,5 ,memory/disk ,cpu`)
+let name = s[0];
+let desc = s[1] || ''
+let usr_id = s[2];
+let egg = s[3];
+let loc = s[4];
+let memo_disk = s[5].split`/`;
+let cpu = s[6];
+
+let f1 = await fetch(domain + "/api/application/nests/5/eggs/" + egg, {
+"method": "GET",
+"headers": {
+"Accept": "application/json",
+"Content-Type": "application/json",
+"Authorization": "Bearer " + apikey
+}
+})
+let data = await f1.json();
+let startup_cmd = "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}"
+
+let f = await fetch(domain + "/api/application/servers", {
+"method": "POST",
+"headers": {
+"Accept": "application/json",
+"Content-Type": "application/json",
+"Authorization": "Bearer " + apikey,
+},
+"body": JSON.stringify({
+"name": name,
+"description": desc,
+"user": usr_id,
+"egg": parseInt(egg),
+"docker_image": "ghcr.io/pterodactyl/yolks:java_17",
+"startup": startup_cmd,
+"environment": {
+
+"SERVER_JARFILE": "server.jar",
+"BUILD_NUMBER": "latest",
+"MINECRAFT_VERSION": "latest"
+},
+"limits": {
+"memory": memo_disk[0],
+"swap": 0,
+"disk": memo_disk[1],
+"io": 500,
+"cpu": cpu
+},
+"feature_limits": {
+"databases": 0,
+"backups": 5,
+"allocations": 0
+},
+deploy: {
+locations: [parseInt(loc)],
+dedicated_ip: false,
+port_range: ["25560-25570"],
+},
+})
+})
+let res = await f.json()
+if (res.errors) return m.reply(JSON.stringify(res.errors[0], null, 2))
+let server = res.attributes
+m.reply(`*Berhasil Menambahkan Server*
+
+SOFTWARE: Java-Paper
 TYPE: ${res.object}
 
 ID: ${server.id}
@@ -485,6 +580,11 @@ CPU: ${t.resources.cpu_absolute}% / ${s.limits.cpu === 0 ? 'Unlimited' : s.limit
 CREATED AT: ${s.created_at}`)
 }
 break
+//case "sendmessage"
+//	let d = (await zassxd.onWhatsApp(u.split`@`[0]))[0] || {}
+//    m.reply('Fitur Sedang Maintenance
+//            ')
+//break
 case "setppbot": {
 if (!isCreator) return 
 if (!quoted) return m.reply(`Kirim/Reply Image Dengan Caption ${prefix + command}`)
@@ -518,14 +618,16 @@ m.reply(`Sukses`)
 }
 break
 
-
+//End Pterodactyl Menu
+        
 case "menu" : {
 m.reply(`   *Pterodactyl Menu*
 ==================================
 ➤ Listusr
 ➤ Listsrv
 ➤ Addusr
-➤ Addsrv
+➤ Addsrvpmmp
+➤ Addsrvpaper
 ➤ Delusr
 ➤ Delsrv
 ➤ Menu
@@ -566,6 +668,104 @@ www.cpancloud.com
 )}
 break
 
+// Antilink
+if (db.data.chats[m.chat].antilink) {
+  if (budy.match(`chat.whatsapp.com`)) {
+     m.reply(`「 *ANTI LINK* 」\n\n*Kamu terdeteksi mengirim link group*, *maaf kamu akan di kick‼️,yang mau juga silahkan kirim link‼️*`)
+     if (!isBotAdmins) return m.reply(mess.botAdmin)
+     let gclink = (`https://chat.whatsapp.com/`+await rex.groupInviteCode(m.chat))
+     let isLinkThisGc = new RegExp(gclink, 'i')
+     let isgclink = isLinkThisGc.test(m.text)
+     if (isgclink) return m.reply(`*Maad Kamu Tidak Akan Dikick!. Kamu Mengirim Link Group Ini!*`)
+     if (isAdmins) return m.reply(`*Maaf Kamu Tidak Akan Dikick!. Karena Kamu Admin!*`)
+     if (isCreator) return m.reply(`*Maaf Kamu Owner Bot Ku!*`)
+     zassxd.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
+  }
+}
+
+
+// Sticker
+case 'toimage': case 'toimg': {
+  if (!quoted) throw 'Reply Image'
+  if (!/webp/.test(mime)) throw `Balas sticker dengan caption *${prefix + command}*`
+  m.reply(mess.wait)
+  let media = await zassxd.downloadAndSaveMediaMessage(quoted)
+  let ran = await getRandom('.png')
+  exec(`ffmpeg -i ${media} ${ran}`, (err) => {
+     fs.unlinkSync(media)
+     if (err) throw err
+     let buffer = fs.readFileSync(ran)
+     zassxd.sendMessage(m.chat, { image: buffer }, { quoted: m })
+     fs.unlinkSync(ran)
+  })
+}
+break
+        
+case 'sticker': case 's': case 'stickergif': case 'sgif': case 'stiker': {
+  if (!quoted) throw `*Balas Video/Image Dengan Caption* ${prefix + command}`
+  m.reply('mess.wait')
+  if (/image/.test(mime)) {
+     let media = await quoted.download()
+     let encmedia = await zassxd.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
+     await fs.unlinkSync(encmedia)
+  } else if (/video/.test(mime)) {
+     if ((quoted.msg || quoted).seconds > 11) return m.reply('*Maksimal 10 detik!*')
+     let media = await quoted.download()
+     let encmedia = await zassxd.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
+     await fs.unlinkSync(encmedia)
+  } else {
+     throw `*Kirim Gambar/Video Dengan Caption* ${prefix + command}\nDurasi *Video 1-9 Detik*`
+  }
+}
+break
+        
+// -- [ Group Menu ] --- //
+
+case 'setnamegc': case 'setsubject': {
+  if (!m.isGroup) throw mess.group
+  if (!isBotAdmins) throw mess.botAdmin
+  if (!isAdmins) throw mess.admin
+  if (!text) throw 'Text ?'
+  await zassxd.groupUpdateSubject(m.chat, text).then((res) => m.reply(mess.done)).catch((err) => m.reply(jsonformat(err)))
+}
+break
+case 'setdesc': case 'setdesk': case 'setdescription': {
+  if (!m.isGroup) throw mess.group
+  if (!isBotAdmins) throw mess.botAdmin
+  if (!isAdmins) throw mess.admin
+  if (!text) throw 'Text ?'
+  await zassxd.groupUpdateDescription(m.chat, text).then((res) => m.reply(mess.done)).catch((err) => m.reply(jsonformat(err)))
+}
+break
+case 'tagall': {
+  if (!m.isGroup) throw mess.group
+  if (!isBotAdmins) throw mess.botAdmin
+  if (!isAdmins) throw mess.admin
+let teks = `══✪〘 *Tag All* 〙✪══
+ 
+ ➲ *Pesan : ${q ? q : 'kosong'}*\n\n`
+  for (let mem of participants) {
+     teks += `⭔ @${mem.id.split('@')[0]}\n`
+  }
+  zassxd.sendMessage(m.chat, { text: teks, mentions: participants.map(a => a.id) }, { quoted: m })
+}
+break
+case 'hidetag': {
+  if (!m.isGroup) throw mess.group
+  if (!isBotAdmins) throw mess.botAdmin
+  if (!isAdmins) throw mess.admin
+  zassxd.sendMessage(m.chat, { text : q ? q : '' , mentions: participants.map(a => a.id)}, { quoted: m })
+}
+break
+case 'linkgroup': case 'linkgc': {
+  if (!m.isGroup) throw mess.group
+  if (!isBotAdmins) throw mess.botAdmin
+  let response = await zassxd.groupInviteCode(m.chat)
+  zassxd.sendText(m.chat, `https://chat.whatsapp.com/${response}\n\n👾Link Group : ${groupMetadata.subject}`, m, { detectLink: true })
+}
+break
+//End Group
+        
 default:
 }
 if (budy.startsWith('>')) {
