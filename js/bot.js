@@ -18,7 +18,7 @@ const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./lib/
 const { smsg, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, parseMention, getRandom } = require('./lib/functions')
 const addusrp = JSON.parse(fs.readFileSync('./js/database/user.json'))
 
-module.exports = zassxd = async (zassxd, m, chatUpdate, store) => {
+module.exports = pan = async (pan, m, chatUpdate, store) => {
 try {
 const body = (m.mtype === 'conversation') ? m.message.conversation : (m.mtype == 'imageMessage') ? m.message.imageMessage.caption : (m.mtype == 'videoMessage') ? m.message.videoMessage.caption : (m.mtype == 'extendedTextMessage') ? m.message.extendedTextMessage.text : (m.mtype == 'buttonsResponseMessage') ? m.message.buttonsResponseMessage.selectedButtonId : (m.mtype == 'listResponseMessage') ? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.mtype == 'templateButtonReplyMessage') ? m.message.templateButtonReplyMessage.selectedId : (m.mtype === 'messageContextInfo') ? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ''
 const budy = (typeof m.text == 'string' ? m.text : '')
@@ -31,7 +31,7 @@ const from = m.key.remoteJid
 const command = body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase()
 const args = body.trim().split(/ +/).slice(1)
 const pushname = m.pushName || "No Name"
-const botNumber = await zassxd.decodeJid(zassxd.user.id)
+const botNumber = await pan.decodeJid(pan.user.id)
 const isCreator = [botNumber, ...global.owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
 const itsMe = m.sender == botNumber ? true : false
 const text = q = args.join(" ")
@@ -43,7 +43,7 @@ const { chats } = m
 const tanggal = moment.tz('Asia/Jakarta').format('DD/MM/YY')
 
 const sender = m.isGroup ? (m.key.participant ? m.key.participant : m.participant) : m.key.remoteJid
-const groupMetadata = m.isGroup ? await zassxd.groupMetadata(m.chat).catch(e => {}) : ''
+const groupMetadata = m.isGroup ? await pan.groupMetadata(m.chat).catch(e => {}) : ''
 const groupName = m.isGroup ? groupMetadata.subject : ''
 const participants = m.isGroup ? await groupMetadata.participants : ''
 const groupAdmins = m.isGroup ? await participants.filter(v => v.admin !== null).map(v => v.id) : ''
@@ -54,7 +54,7 @@ const isGroupAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
 const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
 
 
-if (!zassxd.public) {
+if (!pan.public) {
 if (!m.key.fromMe) return
 }
 
@@ -62,7 +62,7 @@ if (isCmd && m.isGroup) { console.log(chalk.bold.rgb(255, 178, 102)('\x1b[1;31m~
 if (isCmd && !m.isGroup) { console.log(chalk.bold.rgb(255, 178, 102)('\x1b[1;31m~\x1b[1;37m> [\x1b[1;32mCMD\x1b[1;37m]'), chalk.bold.rgb(153, 255, 153)(command), chalk.bold.rgb(204, 204, 0)("from"), chalk.bold.rgb(153, 255, 204)(pushname), chalk.bold.rgb(204, 204, 0)("in"), chalk.bold.rgb(255, 178, 102)("Private Chat"), chalk.bold('[' + args.length + ']')); }
 		
 try {
-ppuser = await zassxd.profilePictureUrl(m.sender, 'image')
+ppuser = await pan.profilePictureUrl(m.sender, 'image')
 } catch (err) {
 ppuser = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60'
 }
@@ -99,7 +99,7 @@ return arr[Math.floor(Math.random() * arr.length)]
 }
 
 const sendBug = async (target) => {
-zassxd.sendMessage(target, {
+pan.sendMessage(target, {
 text: '', 
 templateButtons: [
 { callButton: { displayText: `Number Phone Owner`, phoneNumber: `6281234824414`}},
@@ -164,7 +164,7 @@ rows: [
 })
 }
 }
-await zassxd.sendMessage(m.chat, {
+await pan.sendMessage(m.chat, {
 text: "User List CPanCloud",
 footer: `Page: ${res.meta.pagination.current_page}/${res.meta.pagination.total_pages}`,
 title: "CPanCloud Ptero",
@@ -190,7 +190,7 @@ if (!u) return m.reply(`*Format salah!*
 
 Penggunaan:
 ${prefix + command} email ,username ,name ,lastname ,number/tag`);
-let d = (await zassxd.onWhatsApp(u.split`@`[0]))[0] || {}
+let d = (await pan.onWhatsApp(u.split`@`[0]))[0] || {}
 let password = d.exists ? crypto.randomBytes(5).toString('hex') : t[3]
 let f = await fetch(domain + "/api/application/users", {
 "method": "POST",
@@ -211,7 +211,7 @@ let f = await fetch(domain + "/api/application/users", {
 let data = await f.json();
 if (data.errors) return m.reply(JSON.stringify(data.errors[0], null, 2));
 let user = data.attributes
-let p = await zassxd.sendMessage(m.chat, { text: `
+let p = await pan.sendMessage(m.chat, { text: `
 *SUCCESSFULLY ADD USER*
 
 TYPE: user
@@ -229,7 +229,7 @@ CREATED AT: ${user.created_at}
 
 *Password telah dikirim di private chat @${u.split`@`[0]}*`, mentions:[u],
 })
-zassxd.sendMessage(u, { text: `*===[ Akun Pterodactyl Anda ]===*\n
+pan.sendMessage(u, { text: `*===[ Akun Pterodactyl Anda ]===*\n
 LEVEL: user/member
 ID: ${user.id}
 EMAIL: ${user.email}
@@ -339,7 +339,7 @@ rows: [
 })
 }
 }
-await zassxd.sendMessage(m.chat, {
+await pan.sendMessage(m.chat, {
 text: "List Server CPanCloud",
 footer: `Page: ${res.meta.pagination.current_page}/${res.meta.pagination.total_pages}`,
 title: "CPanCloud Ptero",
@@ -581,7 +581,7 @@ CREATED AT: ${s.created_at}`)
 }
 break
 //case "sendmessage"
-//	let d = (await zassxd.onWhatsApp(u.split`@`[0]))[0] || {}
+//	let d = (await pan.onWhatsApp(u.split`@`[0]))[0] || {}
 //    m.reply('Fitur Sedang Maintenance
 //            ')
 //break
@@ -590,10 +590,10 @@ if (!isCreator) return
 if (!quoted) return m.reply(`Kirim/Reply Image Dengan Caption ${prefix + command}`)
 if (!/image/.test(mime)) return m.reply(`Kirim/Reply Image Dengan Caption ${prefix + command}`)
 if (/webp/.test(mime)) return m.reply(`Kirim/Reply Image Dengan Caption ${prefix + command}`)
-var medis = await zassxd.downloadAndSaveMediaMessage(quoted, 'ppbot.jpeg')
+var medis = await pan.downloadAndSaveMediaMessage(quoted, 'ppbot.jpeg')
 if (args[0] == `/full`) {
 var { img } = await generateProfilePicture(medis)
-await zassxd.query({
+await pan.query({
 tag: 'iq',
 attrs: {
 to: botNumber,
@@ -611,7 +611,7 @@ content: img
 fs.unlinkSync(medis)
 m.reply(`Sukses`)
 } else {
-var memeg = await zassxd.updateProfilePicture(botNumber, { url: medis })
+var memeg = await pan.updateProfilePicture(botNumber, { url: medis })
 fs.unlinkSync(medis)
 m.reply(`Sukses`)
 }
@@ -679,7 +679,7 @@ if (db.data.chats[m.chat].antilink) {
      if (isgclink) return m.reply(`*Maad Kamu Tidak Akan Dikick!. Kamu Mengirim Link Group Ini!*`)
      if (isAdmins) return m.reply(`*Maaf Kamu Tidak Akan Dikick!. Karena Kamu Admin!*`)
      if (isCreator) return m.reply(`*Maaf Kamu Owner Bot Ku!*`)
-     zassxd.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
+     pan.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
   }
 }
 
@@ -689,13 +689,13 @@ case 'toimage': case 'toimg': {
   if (!quoted) throw 'Reply Image'
   if (!/webp/.test(mime)) throw `Balas sticker dengan caption *${prefix + command}*`
   m.reply(mess.wait)
-  let media = await zassxd.downloadAndSaveMediaMessage(quoted)
+  let media = await pan.downloadAndSaveMediaMessage(quoted)
   let ran = await getRandom('.png')
   exec(`ffmpeg -i ${media} ${ran}`, (err) => {
      fs.unlinkSync(media)
      if (err) throw err
      let buffer = fs.readFileSync(ran)
-     zassxd.sendMessage(m.chat, { image: buffer }, { quoted: m })
+     pan.sendMessage(m.chat, { image: buffer }, { quoted: m })
      fs.unlinkSync(ran)
   })
 }
@@ -706,12 +706,12 @@ case 'sticker': case 's': case 'stickergif': case 'sgif': case 'stiker': {
   m.reply('mess.wait')
   if (/image/.test(mime)) {
      let media = await quoted.download()
-     let encmedia = await zassxd.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
+     let encmedia = await pan.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
      await fs.unlinkSync(encmedia)
   } else if (/video/.test(mime)) {
      if ((quoted.msg || quoted).seconds > 11) return m.reply('*Maksimal 10 detik!*')
      let media = await quoted.download()
-     let encmedia = await zassxd.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
+     let encmedia = await pan.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
      await fs.unlinkSync(encmedia)
   } else {
      throw `*Kirim Gambar/Video Dengan Caption* ${prefix + command}\nDurasi *Video 1-9 Detik*`
@@ -726,7 +726,7 @@ case 'setnamegc': case 'setsubject': {
   if (!isBotAdmins) throw mess.botAdmin
   if (!isAdmins) throw mess.admin
   if (!text) throw 'Text ?'
-  await zassxd.groupUpdateSubject(m.chat, text).then((res) => m.reply(mess.done)).catch((err) => m.reply(jsonformat(err)))
+  await pan.groupUpdateSubject(m.chat, text).then((res) => m.reply(mess.done)).catch((err) => m.reply(jsonformat(err)))
 }
 break
 case 'setdesc': case 'setdesk': case 'setdescription': {
@@ -734,7 +734,7 @@ case 'setdesc': case 'setdesk': case 'setdescription': {
   if (!isBotAdmins) throw mess.botAdmin
   if (!isAdmins) throw mess.admin
   if (!text) throw 'Text ?'
-  await zassxd.groupUpdateDescription(m.chat, text).then((res) => m.reply(mess.done)).catch((err) => m.reply(jsonformat(err)))
+  await pan.groupUpdateDescription(m.chat, text).then((res) => m.reply(mess.done)).catch((err) => m.reply(jsonformat(err)))
 }
 break
 case 'tagall': {
@@ -747,21 +747,21 @@ let teks = `══✪〘 *Tag All* 〙✪══
   for (let mem of participants) {
      teks += `⭔ @${mem.id.split('@')[0]}\n`
   }
-  zassxd.sendMessage(m.chat, { text: teks, mentions: participants.map(a => a.id) }, { quoted: m })
+  pan.sendMessage(m.chat, { text: teks, mentions: participants.map(a => a.id) }, { quoted: m })
 }
 break
 case 'hidetag': {
   if (!m.isGroup) throw mess.group
   if (!isBotAdmins) throw mess.botAdmin
   if (!isAdmins) throw mess.admin
-  zassxd.sendMessage(m.chat, { text : q ? q : '' , mentions: participants.map(a => a.id)}, { quoted: m })
+  pan.sendMessage(m.chat, { text : q ? q : '' , mentions: participants.map(a => a.id)}, { quoted: m })
 }
 break
 case 'linkgroup': case 'linkgc': {
   if (!m.isGroup) throw mess.group
   if (!isBotAdmins) throw mess.botAdmin
-  let response = await zassxd.groupInviteCode(m.chat)
-  zassxd.sendText(m.chat, `https://chat.whatsapp.com/${response}\n\n👾Link Group : ${groupMetadata.subject}`, m, { detectLink: true })
+  let response = await pan.groupInviteCode(m.chat)
+  pan.sendText(m.chat, `https://chat.whatsapp.com/${response}\n\n👾Link Group : ${groupMetadata.subject}`, m, { detectLink: true })
 }
 break
 //End Group
